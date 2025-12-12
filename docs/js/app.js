@@ -390,7 +390,7 @@ class FinanceApp {
         const authToggleText = document.getElementById('authToggleText');
         
         if (loginForm && registerForm && authToggleText) {
-            const isRegisterVisible = registerForm.style.display !== 'none';
+            const isRegisterVisible = registerForm.style.display === 'block';
             
             if (isRegisterVisible) {
                 // Показываем форму входа
