@@ -1,1 +1,116 @@
+/* CSS Variables */
+:root {
+    --login-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --primary: #ff6600;
+    --primary-hover: #ff5500;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --info: #3b82f6;
+    --text: #1f2937;
+    --text-light: #6b7280;
+    --bg-light: #f9fafb;
+    --bg-white: #ffffff;
+    --border: #e5e7eb;
+    --dark-bg: #111827;
+    --dark-card: #1f2937;
+    --dark-hover: #374151;
+    --accent: #ff6600;
+}
 
+/* Theme Toggle Button Styles */
+.theme-toggle {
+    position: relative;
+    width: 60px;
+    height: 30px;
+    background: #e5e7eb;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid var(--border);
+}
+
+.theme-toggle:hover {
+    transform: scale(1.05);
+}
+
+.theme-toggle-slider {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 22px;
+    height: 22px;
+    background: white;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.theme-toggle.active {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.theme-toggle.active .theme-toggle-slider {
+    transform: translateX(30px);
+}
+
+.theme-toggle::before {
+    content: '☀️';
+    position: absolute;
+    left: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    transition: opacity 0.3s ease;
+}
+
+.theme-toggle.active::before {
+    opacity: 0;
+}
+
+.theme-toggle::after {
+    content: '🌙';
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.theme-toggle.active::after {
+    opacity: 1;
+}
+
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+    color: var(--text);
+    background: var(--bg-light);
+}
+
+body {
+    line-height: 1.6;
+    padding: 0;
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+}
+
+.container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Smooth transitions */
+body, html, * {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
