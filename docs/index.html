@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="css/dark-theme.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/responsive.css">
-    <script src="js/app.js"></script>
 </head>
 <body>
     <!-- LOGIN SCREEN -->
@@ -35,6 +34,9 @@
 
                         <input type="password" id="loginPassword" class="login-input"
                                placeholder="Пароль" style="display: none;">
+                        <div id="loginSecurityInfo" style="font-size: 0.8em; color: var(--text-light); margin-top: 5px; display: none;">
+                            Ваши данные защищены с помощью шифрования
+                        </div>
 
                         <button type="button" id="nextBtn" class="login-primary-btn" onclick="showPasswordField()">Далее</button>
                         <button type="submit" id="loginBtn" class="login-primary-btn" style="display: none;">Войти</button>
@@ -42,6 +44,17 @@
                 </div>
 
                 <div id="registerForm" style="display: none;">
+                    <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 12px; margin-bottom: 20px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 1.2em;">🔐</span>
+                            <div>
+                                <strong style="color: var(--success);">Защищенная регистрация</strong>
+                                <p style="margin: 4px 0 0 0; font-size: 0.85em; color: var(--text-light);">
+                                    Ваши данные надежно защищены с помощью современного шифрования с использованием соли
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                     <form class="login-form" onsubmit="handleRegister(event)">
                         <label class="login-label">Имя</label>
                         <input type="text" id="regName" class="login-input"
@@ -54,10 +67,18 @@
                         <label class="login-label">Пароль</label>
                         <input type="password" id="regPassword" class="login-input"
                                placeholder="Придумайте пароль" required>
+                        <div style="font-size: 0.8em; color: var(--text-light); margin-top: 5px;">
+                            Минимум 8 символов, включая заглавные/строчные буквы и цифры
+                        </div>
+                        <div style="font-size: 0.75em; color: var(--text-light); margin-top: 8px; padding: 8px; background: var(--bg-light); border-radius: 6px;">
+                            <strong>🔒 Безопасность:</strong> Ваш пароль хешируется с использованием современной криптографии и никогда не сохраняется в открытом виде.
+                        </div>
+                        <div id="passwordStrength"></div>
 
                         <label class="login-label">Подтвердите пароль</label>
                         <input type="password" id="regPassword2" class="login-input"
                                placeholder="Повторите пароль" required>
+                        <div id="passwordMatch"></div>
 
                         <button type="submit" class="login-primary-btn">Зарегистрироваться</button>
                     </form>
