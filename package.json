@@ -1,0 +1,26 @@
+{
+  "name": "finance-assistant",
+  "version": "1.0.0",
+  "description": "Финансовый помощник - приложение для управления личными финансами",
+  "main": "public/index.html",
+  "scripts": {
+    "start": "npx serve public",
+    "build": "echo 'Build process not implemented yet'",
+    "test": "echo 'Tests not implemented yet'",
+    "dev": "npx serve public -l 3000 -o"
+  },
+  "keywords": ["finance", "budget", "expenses", "savings", "investment"],
+  "author": "Finance Assistant Team",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/finance-assistant.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/finance-assistant/issues"
+  },
+  "homepage": "https://github.com/your-username/finance-assistant#readme"
+}
