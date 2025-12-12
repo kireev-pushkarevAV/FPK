@@ -91,7 +91,6 @@ class FinanceApp {
 
         // Кнопка переключения формы регистрации уже имеет onclick в HTML
         // Дополнительный обработчик не нужен, так как он конфликтует с существующим
-        console.log('Register toggle button check');
 
         // Форма регистрации
         const registerForm = document.getElementById('registerForm');
@@ -383,24 +382,15 @@ class FinanceApp {
 
     // Переключение формы регистрации
     toggleRegister() {
-        console.log('toggleRegister called');
         const loginForm = document.getElementById('loginForm');
         const registerForm = document.getElementById('registerForm');
         const authToggleText = document.getElementById('authToggleText');
-        
-        console.log('Elements found:', {
-            loginForm: !!loginForm,
-            registerForm: !!registerForm,
-            authToggleText: !!authToggleText,
-            registerDisplay: registerForm ? registerForm.style.display : 'N/A'
-        });
         
         if (loginForm && registerForm && authToggleText) {
             // Используем более надежную проверку видимости
             const isRegisterVisible = registerForm.style.display !== 'none' &&
                                    registerForm.style.display !== '' &&
                                    window.getComputedStyle(registerForm).display !== 'none';
-            console.log('Is register visible?', isRegisterVisible);
             
             if (isRegisterVisible) {
                 // Показываем форму входа
@@ -419,8 +409,6 @@ class FinanceApp {
                 // Очищаем форму регистрации
                 this.clearRegisterForm();
             }
-        } else {
-            console.error('Missing elements for toggleRegister');
         }
     }
 
@@ -1926,12 +1914,8 @@ function handleRegister(event) {
 
 // Глобальная функция для вызова из HTML onclick
 function toggleRegister() {
-    console.log('Global toggleRegister called');
     if (app && app.toggleRegister) {
-        console.log('App exists, calling toggleRegister method');
         app.toggleRegister();
-    } else {
-        console.error('App or toggleRegister method is not defined');
     }
 }
 
@@ -1957,10 +1941,6 @@ function addIncomeCategory() {
 
 function addExpenseCategory() {
     if (app) app.addExpenseCategory();
-}
-
-function removeCategory(type, cat) {
-    if (app) app.removeCategory(type, cat);
 }
 
 function addBudget() {
@@ -1999,6 +1979,14 @@ function closeGoalPlanModal(goalId) {
     if (app) app.closeGoalPlanModal(goalId);
 }
 
+function removeCategory(type, cat) {
+    if (app) app.removeCategory(type, cat);
+}
+
+
+
+
+
 // Отслеживание просмотров аналитики
 function trackAnalyticsView() {
     const views = parseInt(localStorage.getItem('analyticsViews') || '0');
@@ -2007,7 +1995,6 @@ function trackAnalyticsView() {
 
 // Инициализация приложения при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM Content Loaded');
     app = new FinanceApp();
     
     // Добавляем стили для анимации
@@ -2021,23 +2008,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     `;
     document.head.appendChild(style);
-    
-    // Обработчики для кнопок темы уже добавлены в методе addThemeToggleListeners()
-    console.log('App initialized and theme toggle listeners should be ready');
-    
-    // Проверяем наличие необходимых элементов
-    const loginForm = document.getElementById('loginForm');
-    const registerForm = document.getElementById('registerForm');
-    const authToggleText = document.getElementById('authToggleText');
-    const registerToggleBtn = document.querySelector('.login-secondary-btn');
-    
-    console.log('Elements check after initialization:', {
-        loginForm: !!loginForm,
-        registerForm: !!registerForm,
-        authToggleText: !!authToggleText,
-        registerToggleBtn: !!registerToggleBtn,
-        registerFormDisplay: registerForm ? registerForm.style.display : 'N/A'
-    });
 });
 
 // Загрузка данных при переходе в аналитику
