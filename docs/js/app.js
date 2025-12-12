@@ -89,11 +89,9 @@ class FinanceApp {
             nextBtn.addEventListener('click', () => this.showPasswordField());
         }
 
-        // Кнопка переключения формы регистрации
-        const registerToggleBtn = document.querySelector('.login-secondary-btn');
-        if (registerToggleBtn) {
-            registerToggleBtn.addEventListener('click', () => this.toggleRegister());
-        }
+        // Кнопка переключения формы регистрации уже имеет onclick в HTML
+        // Дополнительный обработчик не нужен, так как он конфликтует с существующим
+        console.log('Register toggle button check');
 
         // Форма регистрации
         const registerForm = document.getElementById('registerForm');
@@ -383,14 +381,26 @@ class FinanceApp {
         if (password2Field) password2Field.value = '';
     }
 
-    // Переключение формы регистрации - ИСПРАВЛЕНО!
+    // Переключение формы регистрации
     toggleRegister() {
+        console.log('toggleRegister called');
         const loginForm = document.getElementById('loginForm');
         const registerForm = document.getElementById('registerForm');
         const authToggleText = document.getElementById('authToggleText');
         
+        console.log('Elements found:', {
+            loginForm: !!loginForm,
+            registerForm: !!registerForm,
+            authToggleText: !!authToggleText,
+            registerDisplay: registerForm ? registerForm.style.display : 'N/A'
+        });
+        
         if (loginForm && registerForm && authToggleText) {
-            const isRegisterVisible = registerForm.style.display === 'block';
+            // Используем более надежную проверку видимости
+            const isRegisterVisible = registerForm.style.display !== 'none' &&
+                                   registerForm.style.display !== '' &&
+                                   window.getComputedStyle(registerForm).display !== 'none';
+            console.log('Is register visible?', isRegisterVisible);
             
             if (isRegisterVisible) {
                 // Показываем форму входа
@@ -409,6 +419,8 @@ class FinanceApp {
                 // Очищаем форму регистрации
                 this.clearRegisterForm();
             }
+        } else {
+            console.error('Missing elements for toggleRegister');
         }
     }
 
@@ -1134,7 +1146,7 @@ class FinanceApp {
             if (badge) {
                 badge.textContent = Math.min(notifications.length, 9);
                 badge.style.display = 'flex';
-               
+                
                 // Проверяем, открыта ли панель
                 const panel = document.getElementById('notificationsPanel');
                 if (panel && panel.style.display === 'block') {
@@ -1150,7 +1162,7 @@ class FinanceApp {
                 e.stopPropagation();
                 const panel = document.getElementById('notificationsPanel');
                 const badge = document.getElementById('notificationBadge');
-               
+                
                 if (panel && panel.style.display === 'none') {
                     panel.style.display = 'block';
                     if (badge) badge.style.display = 'none';
@@ -1165,7 +1177,7 @@ class FinanceApp {
             const bell = document.getElementById('notificationBell');
             const panel = document.getElementById('notificationsPanel');
             const badge = document.getElementById('notificationBadge');
-           
+            
             if (bell && panel && !bell.contains(e.target) && !panel.contains(e.target)) {
                 panel.style.display = 'none';
                 if (badge) badge.style.display = 'none';
@@ -1509,10 +1521,10 @@ class FinanceApp {
                 const spent = this.transactions
                     .filter(t => t.type === 'expense' && this.getCategoryLabel(t.category) === b.category)
                     .reduce((sum, t) => sum + t.amount, 0);
-                 
+                
                 const percent = ((spent / b.limit) * 100).toFixed(0);
                 const status = spent > b.limit ? 'expense' : spent > b.limit * 0.8 ? 'warning' : 'income';
-                 
+                
                 return `
                     <div class="transaction-item ${status}">
                         <div class="transaction-info">
@@ -1626,7 +1638,7 @@ class FinanceApp {
                 const isCompleted = expectedSaved >= g.target;
 
                 return `
-                    <div class="card" data-goal-id="${g.id}" style="background: ${isCompleted ? 'rgba(16, 185, 129, 0.08)' : 'var(--bg-white)'};  border-left: 4px solid ${isCompleted ? 'var(--success)' : 'var(--primary)'}; margin-bottom:16px;">
+                    <div class="card" data-goal-id="${g.id}" style="background: ${isCompleted ? 'rgba(16, 185, 129, 0.08)' : 'var(--bg-white)'};  border-left: 4px solid ${isCompleted ? 'var(--success)' : 'var(--primary)'}; margin-bottom: 16px;">
                         <div style="display: flex; justify-content: space-between; align-items: start;">
                             <div style="flex: 1;">
                                 <h4>${g.name} ${isCompleted ? '✅' : ''}</h4>
@@ -1757,7 +1769,8 @@ class FinanceApp {
                 </div>
 
                 <h3 style="margin-bottom: 16px;">Календарь внесений</h3>
-                <div id="goalCalendar_${goal.id}" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-bottom: 24px;"></div> 
+                <div id="goalCalendar_${goal.id}" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-bottom: 24px;"></div>
+
                 <div style="text-align: center;">
                     <button class="btn btn-primary" onclick="app.closeGoalPlanModal(${goal.id})">Закрыть</button>
                 </div>
@@ -1911,8 +1924,15 @@ function handleRegister(event) {
     if (app) app.handleRegister(event);
 }
 
+// Глобальная функция для вызова из HTML onclick
 function toggleRegister() {
-    if (app) app.toggleRegister();
+    console.log('Global toggleRegister called');
+    if (app && app.toggleRegister) {
+        console.log('App exists, calling toggleRegister method');
+        app.toggleRegister();
+    } else {
+        console.error('App or toggleRegister method is not defined');
+    }
 }
 
 function handleLogout() {
@@ -1987,6 +2007,7 @@ function trackAnalyticsView() {
 
 // Инициализация приложения при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM Content Loaded');
     app = new FinanceApp();
     
     // Добавляем стили для анимации
@@ -2003,6 +2024,20 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Обработчики для кнопок темы уже добавлены в методе addThemeToggleListeners()
     console.log('App initialized and theme toggle listeners should be ready');
+    
+    // Проверяем наличие необходимых элементов
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const authToggleText = document.getElementById('authToggleText');
+    const registerToggleBtn = document.querySelector('.login-secondary-btn');
+    
+    console.log('Elements check after initialization:', {
+        loginForm: !!loginForm,
+        registerForm: !!registerForm,
+        authToggleText: !!authToggleText,
+        registerToggleBtn: !!registerToggleBtn,
+        registerFormDisplay: registerForm ? registerForm.style.display : 'N/A'
+    });
 });
 
 // Загрузка данных при переходе в аналитику
