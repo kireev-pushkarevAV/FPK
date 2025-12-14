@@ -98,12 +98,20 @@
 
     <!-- APP SCREEN -->
     <div id="appScreen" class="app-screen">
-        <header>
+        <header class="finance-header">
             <div class="container">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <h1>💰 ФПК</h1>
-                    <div style="display: flex; align-items: center; gap: 15px;">
-                        <span id="userGreeting" style="color: var(--text-light); font-size: 0.95em;"></span>
+                    <h1 class="app-title">
+                        Финансовый Помощник
+                    </h1>
+                    <div class="user-section">
+                        <div class="user-greeting">
+                            <div class="user-avatar" id="userAvatar">Д</div>
+                            <div class="user-info">
+                                <div class="user-name" id="userName">Demo Пользователь</div>
+                                <div class="user-status">Онлайн</div>
+                            </div>
+                        </div>
                         <div class="theme-toggle" id="themeToggle" title="Переключить тему">
                             <div class="theme-toggle-slider"></div>
                         </div>
@@ -117,20 +125,29 @@
             <!-- DASHBOARD -->
             <div class="dashboard-grid">
                 <div class="stat-card income">
+                    <div class="stat-icon">💰</div>
                     <div class="stat-label">Доходы за месяц</div>
                     <div class="stat-value" id="totalIncome">0 ₽</div>
                 </div>
                 <div class="stat-card expense">
+                    <div class="stat-icon">💸</div>
                     <div class="stat-label">Расходы за месяц</div>
                     <div class="stat-value" id="totalExpense">0 ₽</div>
                 </div>
                 <div class="stat-card balance">
+                    <div class="stat-icon">🏦</div>
                     <div class="stat-label">Чистый остаток</div>
                     <div class="stat-value" id="netBalance">0 ₽</div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card savings">
+                    <div class="circular-progress">
+                        <svg width="120" height="120">
+                            <circle class="background" cx="60" cy="60" r="54"></circle>
+                            <circle class="progress" cx="60" cy="60" r="54" id="savingsProgress"></circle>
+                        </svg>
+                        <div class="percentage" id="savingsRate">0%</div>
+                    </div>
                     <div class="stat-label">% Экономии</div>
-                    <div class="stat-value" id="savingsRate">0%</div>
                 </div>
             </div>
 
@@ -149,50 +166,117 @@
             </div>
 
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('transactions')">💸 Операции</button>
-                <button class="tab-btn" onclick="switchTab('categories')">🏷️ Категории</button>
-                <button class="tab-btn" onclick="switchTab('analytics')">📊 Аналитика</button>
-                <button class="tab-btn" onclick="switchTab('strategies')">🎯 Стратегии</button>
-                <button class="tab-btn" onclick="switchTab('budget')">📋 Бюджет</button>
-                <button class="tab-btn" onclick="switchTab('achievements')">🏆 Достижения</button>
-                <button class="tab-btn" onclick="switchTab('piggybank')">🏦 Копилка</button>
-                <button class="tab-btn" onclick="switchTab('sync')">☁️ Синхронизация</button>
+                <button class="tab-btn active" onclick="switchTab('transactions')">
+                    <span class="tab-btn-icon">💸</span>
+                    <span>Операции</span>
+                </button>
+                <button class="tab-btn" onclick="switchTab('analytics')">
+                    <span class="tab-btn-icon">📊</span>
+                    <span>Аналитика</span>
+                </button>
+                <button class="tab-btn" onclick="switchTab('strategies')">
+                    <span class="tab-btn-icon">🎯</span>
+                    <span>Стратегии</span>
+                </button>
+                <button class="tab-btn" onclick="switchTab('budget')">
+                    <span class="tab-btn-icon">📋</span>
+                    <span>Бюджет</span>
+                </button>
+                <button class="tab-btn" onclick="switchTab('achievements')">
+                    <span class="tab-btn-icon">🏆</span>
+                    <span>Достижения</span>
+                </button>
+                <button class="tab-btn" onclick="switchTab('piggybank')">
+                    <span class="tab-btn-icon">🏦</span>
+                    <span>Копилка</span>
+                </button>
+                <button class="tab-btn" onclick="switchTab('sync')">
+                    <span class="tab-btn-icon">☁️</span>
+                    <span>Синхронизация</span>
+                </button>
             </div>
 
             <!-- ОПЕРАЦИИ -->
             <div id="transactions" class="tab-content active">
                 <div class="card">
-                    <h2>Добавить операцию</h2>
+                    <h2>💸 Добавить операцию</h2>
                     <div class="grid-2">
-                        <div class="form-group">
+                        <div class="form-group input-with-icon">
                             <label for="transType">Тип операции:</label>
                             <select id="transType" onchange="updateCategoryOptions()">
                                 <option value="income">💵 Доход</option>
                                 <option value="expense">💸 Расход</option>
                             </select>
+                            <span class="input-icon">💰</span>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group input-with-icon">
                             <label for="transCategory">Категория:</label>
                             <select id="transCategory">
                                 <option value="salary">Зарплата</option>
                                 <option value="freelance">Фриланс</option>
                                 <option value="investment">Инвестиции</option>
                             </select>
+                            <span class="input-icon">📁</span>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group input-with-icon">
                             <label for="transAmount">Сумма (РУБ):</label>
                             <input type="number" id="transAmount" placeholder="0" min="0" step="100">
+                            <span class="input-icon">💵</span>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group input-with-icon">
                             <label for="transDate">Дата:</label>
                             <input type="date" id="transDate">
+                            <span class="input-icon">📅</span>
                         </div>
                         <div class="form-group" style="grid-column: 1 / -1;">
                             <label for="transDescription">Описание:</label>
                             <textarea id="transDescription" rows="2" placeholder="Дополнительная информация..."></textarea>
+                            <span class="input-icon">📝</span>
                         </div>
                     </div>
-                    <button class="btn btn-primary" onclick="addTransaction()">Добавить операцию</button>
+                    <button class="btn btn-primary" onclick="addTransaction()">
+                        <span class="gold-coin" style="width: 16px; height: 16px; font-size: 8px;">+</span>
+                        Добавить операцию
+                    </button>
+                </div>
+
+                <!-- Управление категориями -->
+                <div class="card">
+                    <h2>💰 Управление категориями</h2>
+                    <div class="info-box">
+                        ℹ️ Настройте свои категории доходов и расходов для более точного анализа операций
+                    </div>
+
+                    <div class="grid-2">
+                        <div>
+                            <h3 style="display: flex; align-items: center; gap: 8px;">
+                                <span class="gold-coin" style="width: 24px; height: 24px; font-size: 12px;">₽</span>
+                                Категории доходов
+                            </h3>
+                            <div id="incomeCategories" class="category-container" style="margin-top: 15px;"></div>
+                            <div class="form-group" style="margin-top: 20px;">
+                                <input type="text" id="newIncomeCategory" placeholder="Новая категория дохода">
+                                <button class="btn btn-primary" onclick="addIncomeCategory()" style="width: 100%; margin-top: 10px;">
+                                    <span class="gold-coin" style="width: 16px; height: 16px; font-size: 8px;">+</span>
+                                    Добавить категорию
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 style="display: flex; align-items: center; gap: 8px;">
+                                <span class="gold-coin" style="width: 24px; height: 24px; font-size: 12px;">💸</span>
+                                Категории расходов
+                            </h3>
+                            <div id="expenseCategories" class="category-container" style="margin-top: 15px;"></div>
+                            <div class="form-group" style="margin-top: 20px;">
+                                <input type="text" id="newExpenseCategory" placeholder="Новая категория расхода">
+                                <button class="btn btn-primary" onclick="addExpenseCategory()" style="width: 100%; margin-top: 10px;">
+                                    <span class="gold-coin" style="width: 16px; height: 16px; font-size: 8px;">+</span>
+                                    Добавить категорию
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card">
@@ -231,39 +315,10 @@
                 </div>
             </div>
 
-            <!-- КАТЕГОРИИ -->
-            <div id="categories" class="tab-content">
-                <div class="card">
-                    <h2>Управление категориями</h2>
-                    <div class="info-box">
-                        ℹ️ Настройте свои категории доходов и расходов для более точного анализа
-                    </div>
-
-                    <div class="grid-2">
-                        <div>
-                            <h3>📥 Категории доходов</h3>
-                            <div id="incomeCategories" style="margin-top: 15px;"></div>
-                            <div class="form-group" style="margin-top: 20px;">
-                                <input type="text" id="newIncomeCategory" placeholder="Новая категория дохода">
-                                <button class="btn btn-primary" onclick="addIncomeCategory()" style="width: 100%; margin-top: 10px;">Добавить</button>
-                            </div>
-                        </div>
-                        <div>
-                            <h3>📤 Категории расходов</h3>
-                            <div id="expenseCategories" style="margin-top: 15px;"></div>
-                            <div class="form-group" style="margin-top: 20px;">
-                                <input type="text" id="newExpenseCategory" placeholder="Новая категория расхода">
-                                <button class="btn btn-primary" onclick="addExpenseCategory()" style="width: 100%; margin-top: 10px;">Добавить</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- АНАЛИТИКА -->
             <div id="analytics" class="tab-content">
                 <div class="card">
-                    <h2>Финансовая аналитика</h2>
+                    <h2>📊 Финансовая аналитика</h2>
                     
                     <div class="grid-2">
                         <div class="chart-container">
@@ -364,7 +419,7 @@
             <!-- БЮДЖЕТ -->
             <div id="budget" class="tab-content">
                 <div class="card">
-                    <h2>📋 План бюджета и расходов</h2>
+                    <h2>💰 План бюджета и расходов</h2>
                     <div class="info-box">
                         ℹ️ Установите месячные лимиты на категории расходов и отслеживайте соответствие плану
                     </div>
@@ -377,18 +432,23 @@
                     <div class="card" style="background: var(--bg-light); margin-top: 20px;">
                         <h3>Добавить новый бюджет</h3>
                         <div class="grid-2">
-                            <div class="form-group">
+                            <div class="form-group input-with-icon">
                                 <label for="budgetCategory">Категория:</label>
                                 <select id="budgetCategory">
                                     <option value="">Выберите категорию</option>
                                 </select>
+                                <span class="input-icon">📁</span>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group input-with-icon">
                                 <label for="budgetLimit">Лимит (РУБ):</label>
                                 <input type="number" id="budgetLimit" placeholder="0" min="0" step="100">
+                                <span class="input-icon">💵</span>
                             </div>
                         </div>
-                        <button class="btn btn-primary" onclick="addBudget()">Добавить бюджет</button>
+                        <button class="btn btn-primary" onclick="addBudget()">
+                            <span class="gold-coin" style="width: 16px; height: 16px; font-size: 8px;">+</span>
+                            Добавить бюджет
+                        </button>
                     </div>
 
                     <div class="warning-box" style="margin-top: 30px;">
@@ -478,24 +538,31 @@
                     <div class="card" style="background: var(--bg-light); margin-top: 20px;">
                         <h3>Создать новую цель</h3>
                         <div class="grid-2">
-                            <div class="form-group">
+                            <div class="form-group input-with-icon">
                                 <label for="goalName">Название цели:</label>
                                 <input type="text" id="goalName" placeholder="Например: Отпуск, Новый ноутбук">
+                                <span class="input-icon">🎯</span>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group input-with-icon">
                                 <label for="goalTarget">Целевая сумма (РУБ):</label>
                                 <input type="number" id="goalTarget" placeholder="0" min="0" step="100">
+                                <span class="input-icon">💰</span>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group input-with-icon">
                                 <label for="goalSaved">Уже накоплено (РУБ):</label>
                                 <input type="number" id="goalSaved" placeholder="0" min="0" step="100">
+                                <span class="input-icon">🪙</span>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group input-with-icon">
                                 <label for="goalDeadline">Дата достижения:</label>
                                 <input type="date" id="goalDeadline">
+                                <span class="input-icon">📅</span>
                             </div>
                         </div>
-                        <button class="btn btn-primary" onclick="addGoal()">Создать цель</button>
+                        <button class="btn btn-primary" onclick="addGoal()">
+                            <span class="gold-coin" style="width: 16px; height: 16px; font-size: 8px;">+</span>
+                            Создать цель
+                        </button>
                     </div>
 
                     <div class="success-box" style="margin-top: 30px;">

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Финансовый Помощник - современное приложение для управления личными финансами">
+    <meta name="keywords" content="финансы, бюджет, расходы, доходы, инвестиции, накопления">
+    <meta name="author" content="Finance Assistant Team">
+    <meta name="theme-color" content="#2c3e50">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://your-domain.com/finance-assistant">
+    <meta property="og:title" content="Финансовый Помощник">
+    <meta property="og:description" content="Современное приложение для управления личными финансами">
+    <meta property="og:image" content="https://your-domain.com/finance-assistant/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://your-domain.com/finance-assistant">
+    <meta property="twitter:title" content="Финансовый Помощник">
+    <meta property="twitter:description" content="Современное приложение для управления личными финансами">
+    <meta property="twitter:image" content="https://your-domain.com/finance-assistant/twitter-image.jpg">
+
+    <title>ФПК - Финансовый Помощник</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="css/main.css" as="style">
+    <link rel="preload" href="css/components.css" as="style">
+    <link rel="preload" href="css/responsive.css" as="style">
+    <link rel="preload" href="js/security.js" as="script">
+    <link rel="preload" href="js/validator.js" as="script">
+    <link rel="preload" href="js/logger.js" as="script">
+    <link rel="preload" href="js/app-core.js" as="script">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/dark-theme.css" media="(prefers-color-scheme: dark)">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    
+    <!-- Manifest for PWA -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Security headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    
+    <!-- Performance optimization -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="preconnect" href="//fonts.googleapis.com" crossorigin>
+    
+    <style>
+        /* Critical CSS for immediate rendering */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #2c3e50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .no-js {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: #f8f9fa;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .no-js-content {
+            max-width: 400px;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+    
+    <!-- No JavaScript fallback -->
+    <noscript>
+        <div class="no-js">
+            <div class="no-js-content">
+                <h1>⚠️ JavaScript отключен</h1>
+                <p>Для работы Финансового Помощника необходимо включить JavaScript в настройках браузера.</p>
+                <p>Пожалуйста, включите JavaScript и перезагрузите страницу.</p>
+            </div>
+        </div>
+    </noscript>
+    
+    <!-- Main Application Container -->
+    <div id="app" style="display: none;">
+        <!-- LOGIN SCREEN -->
+        <section id="loginScreen" class="login-screen" role="main" aria-label="Экран входа">
+            <div class="login-page">
+                <div class="login-left">
+                    <header class="login-header">
+                        <div class="login-header-content">
+                            <div class="login-logo" role="img" aria-label="Логотип ФПК">ФПК</div>
+                            <button 
+                                class="theme-toggle" 
+                                id="loginThemeToggle" 
+                                title="Переключить тему"
+                                aria-label="Переключить цветовую тему"
+                                type="button">
+                                <span class="theme-toggle-slider" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                        <h1>Вход или регистрация</h1>
+                        <p class="login-subtitle">
+                            Используйте email или телефон, чтобы войти в ваш Финансовый помощник
+                        </p>
+                    </header>
+
+                    <main class="login-main">
+                        <!-- Login Form -->
+                        <div id="loginForm" class="auth-form">
+                            <form 
+                                class="login-form" 
+                                onsubmit="handleLogin(event)"
+                                novalidate
+                                aria-label="Форма входа">
+                                
+                                <fieldset class="form-fieldset">
+                                    <legend class="sr-only">Данные для входа</legend>
+                                    
+                                    <div class="form-group">
+                                        <label for="loginEmail" class="login-label">
+                                            Почта или телефон
+                                            <span class="required" aria-label="Обязательное поле">*</span>
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input 
+                                                type="email" 
+                                                id="loginEmail" 
+                                                class="login-input"
+                                                placeholder="Введите эл. почту или телефон"
+                                                required
+                                                aria-describedby="loginEmailHelp"
+                                                autocomplete="email">
+                                            <span class="input-icon" aria-hidden="true">📧</span>
+                                        </div>
+                                        <small id="loginEmailHelp" class="form-help">
+                                            Введите ваш email или номер телефона
+                                        </small>
+                                    </div>
+
+                                    <div class="form-group" id="passwordGroup" style="display: none;">
+                                        <label for="loginPassword" class="login-label">
+                                            Пароль
+                                            <span class="required" aria-label="Обязательное поле">*</span>
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input 
+                                                type="password" 
+                                                id="loginPassword" 
+                                                class="login-input"
+                                                placeholder="Пароль"
+                                                required
+                                                aria-describedby="loginPasswordHelp"
+                                                autocomplete="current-password">
+                                            <span class="input-icon" aria-hidden="true">🔒</span>
+                                        </div>
+                                        <small id="loginPasswordHelp" class="form-help">
+                                            Введите ваш пароль
+                                        </small>
+                                        <div id="loginSecurityInfo" class="security-info" style="display: none;">
+                                            <span class="security-icon">🔐</span>
+                                            Ваши данные защищены с помощью шифрования
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <div class="form-actions">
+                                    <button 
+                                        type="button" 
+                                        id="nextBtn" 
+                                        class="login-primary-btn"
+                                        onclick="showPasswordField()"
+                                        aria-label="Продолжить к вводу пароля">
+                                        Далее
+                                    </button>
+                                    <button 
+                                        type="submit" 
+                                        id="loginBtn" 
+                                        class="login-primary-btn"
+                                        style="display: none;"
+                                        aria-label="Войти в систему">
+                                        Войти
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Registration Form -->
+                        <div id="registerForm" class="auth-form" style="display: none;">
+                            <div class="security-notice">
+                                <div class="security-notice-content">
+                                    <span class="security-icon">🔐</span>
+                                    <div>
+                                        <strong>Защищенная регистрация</strong>
+                                        <p>Ваши данные надежно защищены с помощью современного шифрования с использованием соли</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <form 
+                                class="login-form" 
+                                onsubmit="handleRegister(event)"
+                                novalidate
+                                aria-label="Форма регистрации">
+                                
+                                <fieldset class="form-fieldset">
+                                    <legend class="sr-only">Данные для регистрации</legend>
+                                    
+                                    <div class="form-group">
+                                        <label for="regName" class="login-label">
+                                            Имя
+                                            <span class="required" aria-label="Обязательное поле">*</span>
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input 
+                                                type="text" 
+                                                id="regName" 
+                                                class="login-input"
+                                                placeholder="Введите ваше имя"
+                                                required
+                                                aria-describedby="regNameHelp"
+                                                autocomplete="name">
+                                            <span class="input-icon" aria-hidden="true">👤</span>
+                                        </div>
+                                        <small id="regNameHelp" class="form-help">
+                                            Введите ваше настоящее имя
+                                        </small>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="regEmail" class="login-label">
+                                            Почта
+                                            <span class="required" aria-label="Обязательное поле">*</span>
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input 
+                                                type="email" 
+                                                id="regEmail" 
+                                                class="login-input"
+                                                placeholder="Введите эл. почту"
+                                                required
+                                                aria-describedby="regEmailHelp"
+                                                autocomplete="email">
+                                            <span class="input-icon" aria-hidden="true">📧</span>
+                                        </div>
+                                        <small id="regEmailHelp" class="form-help">
+                                            Мы не будем спамить
+                                        </small>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="regPassword" class="login-label">
+                                            Пароль
+                                            <span class="required" aria-label="Обязательное поле">*</span>
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input 
+                                                type="password" 
+                                                id="regPassword" 
+                                                class="login-input"
+                                                placeholder="Придумайте пароль"
+                                                required
+                                                aria-describedby="regPasswordHelp regPasswordStrength"
+                                                autocomplete="new-password">
+                                            <span class="input-icon" aria-hidden="true">🔒</span>
+                                        </div>
+                                        <small id="regPasswordHelp" class="form-help">
+                                            Минимум 8 символов, включая заглавные/строчные буквы и цифры
+                                        </small>
+                                        <div id="passwordStrength" class="password-strength" aria-live="polite"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="regPassword2" class="login-label">
+                                            Подтвердите пароль
+                                            <span class="required" aria-label="Обязательное поле">*</span>
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input 
+                                                type="password" 
+                                                id="regPassword2" 
+                                                class="login-input"
+                                                placeholder="Повторите пароль"
+                                                required
+                                                aria-describedby="regPassword2Help"
+                                                autocomplete="new-password">
+                                            <span class="input-icon" aria-hidden="true">🔒</span>
+                                        </div>
+                                        <small id="regPassword2Help" class="form-help">
+                                            Повторите пароль для подтверждения
+                                        </small>
+                                        <div id="passwordMatch" class="password-match" aria-live="polite"></div>
+                                    </div>
+                                </fieldset>
+
+                                <div class="form-actions">
+                                    <button 
+                                        type="submit" 
+                                        class="login-primary-btn"
+                                        aria-label="Зарегистрироваться">
+                                        Зарегистрироваться
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </main>
+
+                    <footer class="login-footer">
+                        <button 
+                            class="login-secondary-btn" 
+                            onclick="toggleRegister()"
+                            aria-label="Переключиться между входом и регистрацией">
+                            <span id="authToggleText">Нет аккаунта? Зарегистрироваться</span>
+                        </button>
+                    </footer>
+                </div>
+
+                <div class="login-right" role="img" aria-label="Иллюстрация финансового приложения">
+                    <div class="login-illustration" aria-hidden="true"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- APP SCREEN -->
+        <main id="appScreen" class="app-screen" style="display: none;" role="main">
+            <header class="finance-header">
+                <div class="container">
+                    <div class="header-content">
+                        <h1 class="app-title">
+                            <span class="app-logo">ФПК</span>
+                            Финансовый Помощник
+                        </h1>
+                        
+                        <div class="user-section">
+                            <div class="user-greeting">
+                                <div class="user-avatar" id="userAvatar" aria-label="Аватар пользователя">Д</div>
+                                <div class="user-info">
+                                    <div class="user-name" id="userName">Demo Пользователь</div>
+                                    <div class="user-status" id="userStatus">Онлайн</div>
+                                </div>
+                            </div>
+                            
+                            <div class="header-controls">
+                                <button 
+                                    class="theme-toggle" 
+                                    id="themeToggle" 
+                                    title="Переключить тему"
+                                    aria-label="Переключить цветовую тему"
+                                    type="button">
+                                    <span class="theme-toggle-slider" aria-hidden="true"></span>
+                                </button>
+                                
+                                <button 
+                                    class="btn btn-danger btn-small" 
+                                    onclick="handleLogout()"
+                                    aria-label="Выйти из системы">
+                                    Выход
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="container">
+                <!-- Dashboard will be dynamically loaded here -->
+                <div id="dashboardContainer" role="region" aria-label="Панель управления">
+                    <!-- Content will be loaded by JavaScript -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Error boundary -->
+    <div id="errorBoundary" class="error-boundary" style="display: none;" role="alert">
+        <div class="error-content">
+            <h2>⚠️ Произошла ошибка</h2>
+            <p id="errorMessage">Что-то пошло не так. Пожалуйста, перезагрузите страницу.</p>
+            <button onclick="location.reload()" class="btn btn-primary">
+                Перезагрузить страницу
+            </button>
+        </div>
+    </div>
+
+    <!-- Scripts with optimized loading -->
+    <script>
+        // Global error handling
+        window.addEventListener('error', function(e) {
+            console.error('Global error:', e.error);
+            document.getElementById('loadingOverlay').style.display = 'none';
+            document.getElementById('errorBoundary').style.display = 'flex';
+            document.getElementById('errorMessage').textContent = 
+                'Произошла критическая ошибка: ' + (e.error?.message || 'неизвестная ошибка');
+        });
+
+        // Performance monitoring
+        if ('performance' in window) {
+            window.addEventListener('load', function() {
+                const perfData = performance.getEntriesByType('navigation')[0];
+                console.log('Page load performance:', {
+                    domContentLoaded: perfData.domContentLoadedEventEnd - perfData.navigationStart,
+                    loadComplete: perfData.loadEventEnd - perfData.navigationStart,
+                    firstPaint: performance.getEntriesByType('paint')[0]?.startTime
+                });
+            });
+        }
+    </script>
+
+    <!-- Load scripts with defer for better performance -->
+    <script src="js/security.js" defer></script>
+    <script src="js/validator.js" defer></script>
+    <script src="js/logger.js" defer></script>
+    <script src="js/app-core.js" defer></script>
+    <script src="js/data-manager.js" defer></script>
+    <script src="js/auth-module.js" defer></script>
+    <script src="js/ui-manager.js" defer></script>
+    <script src="js/app.js" defer></script>
+
+    <!-- Chart.js for analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+</body>
+</html>
