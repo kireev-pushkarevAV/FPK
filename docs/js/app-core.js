@@ -16,6 +16,14 @@ class FinanceAppCore {
         this.subscribers = {};
         this.initialized = false;
         
+        // Временный логгер до инициализации основного
+        this.tempLogger = {
+            info: (msg, data) => console.info(`[AppCore] ${msg}`, data),
+            error: (msg, data) => console.error(`[AppCore] ${msg}`, data),
+            warn: (msg, data) => console.warn(`[AppCore] ${msg}`, data),
+            debug: (msg, data) => console.debug(`[AppCore] ${msg}`, data)
+        };
+        
         // Инициализация
         this.init();
     }
@@ -25,7 +33,7 @@ class FinanceAppCore {
      */
     async init() {
         try {
-            logger.info('Инициализация приложения');
+            this.tempLogger.info('Инициализация приложения');
             
             // Загрузка модулей
             await this.loadModules();
@@ -42,8 +50,10 @@ class FinanceAppCore {
             this.initialized = true;
             this.emit('app:initialized');
             
+            const logger = this.getModule('logger') || this.tempLogger;
             logger.info('Приложение успешно инициализировано');
         } catch (error) {
+            const logger = this.getModule('logger') || this.tempLogger;
             logger.error('Ошибка инициализации приложения', error);
             this.state.error = error;
             this.emit('app:error', error);
@@ -55,28 +65,34 @@ class FinanceAppCore {
      */
     async loadModules() {
         const moduleConfigs = [
-            { name: 'security', class: SecurityModule, required: true },
-            { name: 'validator', class: Validator, required: true },
-            { name: 'auth', class: AuthModule, required: true },
-            { name: 'data', class: DataManager, required: true },
-            { name: 'ui', class: UIManager, required: true },
-            { name: 'analytics', class: AnalyticsModule, required: false },
-            { name: 'notifications', class: NotificationModule, required: false }
+            { name: 'security', className: 'SecurityModule', required: true },
+            { name: 'validator', className: 'Validator', required: true },
+            { name: 'auth', className: 'AuthModule', required: true },
+            { name: 'data', className: 'DataManager', required: true },
+            { name: 'ui', className: 'UIManager', required: true },
+            { name: 'analytics', className: 'AnalyticsModule', required: false },
+            { name: 'notifications', className: 'NotificationModule', required: false }
         ];
 
         for (const config of moduleConfigs) {
             try {
-                if (window[config.class]) {
-                    this.modules[config.name] = new window[config.class]();
-                    logger.debug(`Модуль ${config.name} загружен`);
+                const ModuleClass = window[config.className];
+                if (ModuleClass) {
+                    // Для UIManager используем getInstance, для других new
+                    if (config.className === 'UIManager') {
+                        this.modules[config.name] = ModuleClass.getInstance();
+                    } else {
+                        this.modules[config.name] = new ModuleClass();
+                    }
+                    this.tempLogger.debug(`Модуль ${config.name} загружен`);
                 } else if (config.required) {
-                    throw new Error(`Обязательный модуль ${config.name} не найден`);
+                    throw new Error(`Обязательный модуль ${config.name} (${config.className}) не найден`);
                 }
             } catch (error) {
                 if (config.required) {
                     throw error;
                 } else {
-                    logger.warn(`Опциональный модуль ${config.name} не загружен`, error);
+                    this.tempLogger.warn(`Опциональный модуль ${config.name} не загружен`, error);
                 }
             }
         }
@@ -86,6 +102,8 @@ class FinanceAppCore {
      * Инициализация загруженных модулей
      */
     async initializeModules() {
+        const logger = this.getModule('logger') || this.tempLogger;
+        
         for (const [name, module] of Object.entries(this.modules)) {
             if (typeof module.init === 'function') {
                 try {
@@ -103,6 +121,8 @@ class FinanceAppCore {
      * Настройка обработчиков событий
      */
     setupEventListeners() {
+        const logger = this.getModule('logger') || this.tempLogger;
+        
         // Обработка ошибок
         window.addEventListener('error', (event) => {
             logger.error('Глобальная ошибка', {
@@ -166,9 +186,11 @@ class FinanceAppCore {
                 this.state.user = state.user || null;
                 this.state.isAuthenticated = !!state.user;
                 
+                const logger = this.getModule('logger') || this.tempLogger;
                 logger.debug('Состояние приложения восстановлено');
             }
         } catch (error) {
+            const logger = this.getModule('logger') || this.tempLogger;
             logger.error('Ошибка восстановления состояния', error);
         }
     }
@@ -185,8 +207,10 @@ class FinanceAppCore {
             };
             
             localStorage.setItem('appState', JSON.stringify(stateToSave));
+            const logger = this.getModule('logger') || this.tempLogger;
             logger.debug('Состояние приложения сохранено');
         } catch (error) {
+            const logger = this.getModule('logger') || this.tempLogger;
             logger.error('Ошибка сохранения состояния', error);
         }
     }
@@ -205,6 +229,7 @@ class FinanceAppCore {
         }
         
         this.emit('state:changed', { prevState, newState });
+        const logger = this.getModule('logger') || this.tempLogger;
         logger.debug('Состояние обновлено', { prevState, newState });
     }
 
@@ -277,11 +302,13 @@ class FinanceAppCore {
                 try {
                     callback(data);
                 } catch (error) {
+                    const logger = this.getModule('logger') || this.tempLogger;
                     logger.error(`Ошибка в обработчике события ${event}`, error);
                 }
             });
         }
         
+        const logger = this.getModule('logger') || this.tempLogger;
         logger.trace(`Событие: ${event}`, data);
     }
 
@@ -292,6 +319,17 @@ class FinanceAppCore {
      */
     getModule(moduleName) {
         return this.modules[moduleName] || null;
+    }
+
+    /**
+     * Регистрация модуля
+     * @param {string} name - имя модуля
+     * @param {Object} module - экземпляр модуля
+     */
+    registerModule(name, module) {
+        this.modules[name] = module;
+        const logger = this.getModule('logger') || this.tempLogger;
+        logger.debug(`Модуль ${name} зарегистрирован`);
     }
 
     /**
@@ -330,9 +368,11 @@ class FinanceAppCore {
         
         if (user) {
             this.emit('user:login', user);
+            const logger = this.getModule('logger') || this.tempLogger;
             logger.info(`Пользователь вошел: ${user.email}`);
         } else {
             this.emit('user:logout');
+            const logger = this.getModule('logger') || this.tempLogger;
             logger.info('Пользователь вышел');
         }
     }
@@ -346,6 +386,7 @@ class FinanceAppCore {
             this.setState({ currentTheme: theme });
             document.body.classList.toggle('dark-theme', theme === 'dark');
             this.emit('theme:changed', theme);
+            const logger = this.getModule('logger') || this.tempLogger;
             logger.info(`Тема изменена на: ${theme}`);
         }
     }
@@ -380,6 +421,7 @@ class FinanceAppCore {
     setError(error) {
         this.setState({ error });
         this.emit('app:error', error);
+        const logger = this.getModule('logger') || this.tempLogger;
         logger.error('Ошибка приложения', error);
     }
 
@@ -395,6 +437,7 @@ class FinanceAppCore {
      * Перезагрузка приложения
      */
     reload() {
+        const logger = this.getModule('logger') || this.tempLogger;
         logger.info('Перезагрузка приложения');
         window.location.reload();
     }
