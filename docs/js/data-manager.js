@@ -46,7 +46,8 @@ class DataManager {
             await this.syncWithServer();
         }
         
-        logger.info('Модуль управления данными инициализирован');
+        // Используем консоль до инициализации логгера
+        console.info('Модуль управления данными инициализирован');
     }
 
     /**
@@ -63,7 +64,7 @@ class DataManager {
 
         window.addEventListener('offline', () => {
             this.offlineMode = true;
-            logger.warn('Приложение перешло в офлайн режим');
+            console.warn('Приложение перешло в офлайн режим');
         });
 
         // Периодическая синхронизация
@@ -84,7 +85,7 @@ class DataManager {
                 await this.loadUserData(currentUser.id);
             }
             
-            logger.debug('Начальные данные загружены');
+            console.debug('Начальные данные загружены');
         } catch (error) {
             logger.error('Ошибка загрузки начальных данных', error);
             throw error;
@@ -100,7 +101,7 @@ class DataManager {
             const userData = localStorage.getItem(this.storageKeys.user);
             return userData ? JSON.parse(userData) : null;
         } catch (error) {
-            logger.error('Ошибка получения текущего пользователя', error);
+            console.error('Ошибка получения текущего пользователя', error);
             return null;
         }
     }
@@ -119,7 +120,7 @@ class DataManager {
                 this.clearCache();
             }
         } catch (error) {
-            logger.error('Ошибка установки пользователя', error);
+            console.error('Ошибка установки пользователя', error);
         }
     }
 
@@ -157,11 +158,11 @@ class DataManager {
                 timestamp: Date.now()
             });
             
-            logger.debug(`Данные пользователя ${userId} загружены`);
+            console.debug(`Данные пользователя ${userId} загружены`);
             return userData;
             
         } catch (error) {
-            logger.error(`Ошибка загрузки данных пользователя ${userId}`, error);
+            console.error(`Ошибка загрузки данных пользователя ${userId}`, error);
             // Возвращаем данные из localStorage как резерв
             return this.loadFromLocalStorage(userId);
         }
@@ -184,7 +185,7 @@ class DataManager {
                 }
             }
         } catch (error) {
-            logger.warn('Ошибка загрузки данных с сервера', error);
+            console.warn('Ошибка загрузки данных с сервера', error);
         }
         return null;
     }
@@ -202,7 +203,7 @@ class DataManager {
             try {
                 return JSON.parse(savedData);
             } catch (error) {
-                logger.error('Ошибка парсинга данных из localStorage', error);
+                console.error('Ошибка парсинга данных из localStorage', error);
             }
         }
         
@@ -266,7 +267,7 @@ class DataManager {
             logger.debug('Данные пользователя сохранены');
             
         } catch (error) {
-            logger.error('Ошибка сохранения данных пользователя', error);
+            console.error('Ошибка сохранения данных пользователя', error);
             throw error;
         }
     }
@@ -311,7 +312,7 @@ class DataManager {
                 }
             }
         } catch (error) {
-            logger.warn('Ошибка синхронизации с сервером', error);
+            console.warn('Ошибка синхронизации с сервером', error);
             // Добавляем в очередь для повторной попытки
             this.syncQueue.push({
                 type: 'save',
@@ -347,7 +348,7 @@ class DataManager {
                 }
             }
         } catch (error) {
-            logger.warn('Ошибка синхронизации', error);
+            console.warn('Ошибка синхронизации', error);
         }
     }
 
@@ -501,7 +502,7 @@ class DataManager {
         await this.saveUserData(userData);
 
         this.app.emit('data:transaction-added', newTransaction);
-        logger.info('Транзакция добавлена', newTransaction);
+        console.info('Транзакция добавлена', newTransaction);
 
         return newTransaction;
     }
@@ -523,7 +524,7 @@ class DataManager {
         await this.saveUserData(userData);
 
         this.app.emit('data:transaction-deleted', transactionId);
-        logger.info('Транзакция удалена', { id: transactionId });
+        console.info('Транзакция удалена', { id: transactionId });
     }
 
     /**
@@ -544,7 +545,7 @@ class DataManager {
      */
     clearCache() {
         this.cache.clear();
-        logger.debug('Кэш очищен');
+        console.debug('Кэш очищен');
     }
 
     /**
@@ -639,10 +640,10 @@ class DataManager {
             await this.saveUserData(userData);
 
             this.app.emit('data:imported', { importData, options });
-            logger.info('Данные импортированы', { options });
+            console.info('Данные импортированы', { options });
 
         } catch (error) {
-            logger.error('Ошибка импорта данных', error);
+            console.error('Ошибка импорта данных', error);
             throw error;
         }
     }
