@@ -1,0 +1,583 @@
+/**
+ * Performance Optimized CSS for Finance Assistant
+ * Содержит оптимизации для повышения производительности и доступности
+ */
+
+/* CSS Custom Properties с поддержкой отладки */
+:root {
+    /* Performance optimizations */
+    --will-change-auto: auto;
+    --transform-gpu: translateZ(0);
+    --backface-visibility: hidden;
+    
+    /* Animation performance */
+    --animation-duration-fast: 0.15s;
+    --animation-duration-normal: 0.3s;
+    --animation-duration-slow: 0.5s;
+    --animation-timing: cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* GPU acceleration hints */
+    --gpu-accelerated: translateZ(0) scale(1);
+    --layer-promotion: will-change: transform, opacity;
+    
+    /* Containment for better performance */
+    --contain-layout: contain: layout style paint;
+    --contain-paint: contain: paint;
+}
+
+/* Base performance optimizations */
+* {
+    box-sizing: border-box;
+}
+
+/* GPU acceleration for animated elements */
+.gpu-accelerated {
+    transform: var(--gpu-accelerated);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Layer promotion for frequently updated elements */
+.layer-promoted {
+    will-change: transform, opacity;
+    contain: var(--contain-layout);
+}
+
+/* Optimized animations */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) var(--gpu-accelerated);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) var(--gpu-accelerated);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) var(--gpu-accelerated);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) var(--gpu-accelerated);
+    }
+}
+
+/* Performance-optimized transitions */
+.performance-transition {
+    transition: all var(--animation-duration-normal) var(--animation-timing);
+    transform: var(--gpu-accelerated);
+    backface-visibility: hidden;
+}
+
+/* Fast transitions */
+.performance-transition-fast {
+    transition: all var(--animation-duration-fast) var(--animation-timing);
+    transform: var(--gpu-accelerated);
+}
+
+/* Optimized button styles */
+.btn {
+    /* Layer promotion for better interaction performance */
+    will-change: transform, box-shadow;
+    transform: var(--gpu-accelerated);
+    backface-visibility: hidden;
+    
+    /* Containment for better rendering */
+    contain: var(--contain-layout);
+    
+    /* Optimized transition */
+    transition: 
+        transform var(--animation-duration-fast) var(--animation-timing),
+        box-shadow var(--animation-duration-fast) var(--animation-timing),
+        background-color var(--animation-duration-fast) var(--animation-timing);
+}
+
+.btn:hover {
+    transform: translateY(-2px) var(--gpu-accelerated);
+}
+
+.btn:active {
+    transform: translateY(0) var(--gpu-accelerated);
+}
+
+/* Optimized card styles */
+.card, .stat-card {
+    /* Layer promotion for animations */
+    will-change: transform, box-shadow;
+    transform: var(--gpu-accelerated);
+    backface-visibility: hidden;
+    
+    /* Containment for better performance */
+    contain: var(--contain-layout);
+    
+    /* Optimized transition */
+    transition: 
+        transform var(--animation-duration-normal) var(--animation-timing),
+        box-shadow var(--animation-duration-normal) var(--animation-timing);
+}
+
+.card:hover, .stat-card:hover {
+    transform: translateY(-4px) scale(1.02) var(--gpu-accelerated);
+    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.2);
+}
+
+/* Optimized modal styles */
+.modal {
+    /* Layer promotion for smooth animations */
+    will-change: opacity, transform;
+    transform: var(--gpu-accelerated);
+    backface-visibility: hidden;
+    
+    /* Containment */
+    contain: var(--contain-layout);
+    
+    /* Optimized transitions */
+    transition: 
+        opacity var(--animation-duration-normal) var(--animation-timing),
+        transform var(--animation-duration-normal) var(--animation-timing);
+}
+
+.modal-content {
+    /* Layer promotion for modal content */
+    will-change: transform, opacity;
+    transform: var(--gpu-accelerated);
+    backface-visibility: hidden;
+    
+    /* Containment for modal content */
+    contain: var(--contain-layout);
+}
+
+/* Optimized loading spinner */
+.loading-spinner {
+    /* GPU acceleration for smooth rotation */
+    will-change: transform;
+    transform: var(--gpu-accelerated);
+    backface-visibility: hidden;
+    
+    /* Optimized animation */
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg) var(--gpu-accelerated); }
+    to { transform: rotate(360deg) var(--gpu-accelerated); }
+}
+
+/* Optimized form inputs */
+input, textarea, select {
+    /* Layer promotion for focus states */
+    will-change: border-color, box-shadow, transform;
+    transform: var(--gpu-accelerated);
+    backface-visibility: hidden;
+    
+    /* Optimized transitions */
+    transition: 
+        border-color var(--animation-duration-fast) var(--animation-timing),
+        box-shadow var(--animation-duration-fast) var(--animation-timing),
+        transform var(--animation-duration-fast) var(--animation-timing);
+}
+
+input:focus, textarea:focus, select:focus {
+    transform: scale(1.01) var(--gpu-accelerated);
+}
+
+/* Optimized tabs */
+.tab-btn {
+    /* Layer promotion for tab interactions */
+    will-change: transform, background-color, color;
+    transform: var(--gpu-accelerated);
+    backface-visibility: hidden;
+    
+    /* Containment */
+    contain: var(--contain-layout);
+    
+    /* Optimized transitions */
+    transition: 
+        transform var(--animation-duration-fast) var(--animation-timing),
+        background-color var(--animation-duration-fast) var(--animation-timing),
+        color var(--animation-duration-fast) var(--animation-timing);
+}
+
+.tab-btn:hover {
+    transform: translateY(-2px) var(--gpu-accelerated);
+}
+
+.tab-btn.active {
+    transform: scale(1.02) var(--gpu-accelerated);
+}
+
+/* Optimized transaction items */
+.transaction-item {
+    /* Layer promotion for hover effects */
+    will-change: transform, box-shadow;
+    transform: var(--gpu-accelerated);
+    backface-visibility: hidden;
+    
+    /* Containment */
+    contain: var(--contain-layout);
+    
+    /* Optimized transition */
+    transition: 
+        transform var(--animation-duration-normal) var(--animation-timing),
+        box-shadow var(--animation-duration-normal) var(--animation-timing);
+}
+
+.transaction-item:hover {
+    transform: translateX(8px) scale(1.01) var(--gpu-accelerated);
+}
+
+/* Optimized charts and graphs */
+.chart-container {
+    /* Containment for better chart rendering */
+    contain: var(--contain-layout);
+    
+    /* Layer promotion for chart animations */
+    will-change: transform;
+    transform: var(--gpu-accelerated);
+}
+
+/* Optimized notification panel */
+.notificationsPanel {
+    /* Layer promotion for smooth animations */
+    will-change: opacity, transform;
+    transform: var(--gpu-accelerated);
+    backface-visibility: hidden;
+    
+    /* Containment */
+    contain: var(--contain-layout);
+    
+    /* Optimized transitions */
+    transition: 
+        opacity var(--animation-duration-normal) var(--animation-timing),
+        transform var(--animation-duration-normal) var(--animation-timing);
+}
+
+/* Performance-optimized scrolling */
+.scrollable-container {
+    /* Hardware acceleration for smooth scrolling */
+    will-change: transform;
+    transform: var(--gpu-accelerated);
+    backface-visibility: hidden;
+    
+    /* Optimized scrolling */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    
+    /* Containment */
+    contain: var(--contain-layout);
+}
+
+/* Optimized dropdown menus */
+.dropdown {
+    /* Layer promotion for smooth animations */
+    will-change: opacity, transform;
+    transform: var(--gpu-accelerated);
+    backface-visibility: hidden;
+    
+    /* Containment */
+    contain: var(--contain-layout);
+}
+
+/* Performance-optimized tooltips */
+.tooltip {
+    /* Layer promotion for tooltip animations */
+    will-change: opacity, transform;
+    transform: var(--gpu-accelerated);
+    backface-visibility: hidden;
+    
+    /* Containment */
+    contain: var(--contain-paint);
+    
+    /* Optimized transitions */
+    transition: 
+        opacity var(--animation-duration-fast) var(--animation-timing),
+        transform var(--animation-duration-fast) var(--animation-timing);
+}
+
+/* Optimized progress bars */
+.progress-bar {
+    /* Layer promotion for smooth animations */
+    will-change: width, background-color;
+    transform: var(--gpu-accelerated);
+    backface-visibility: hidden;
+    
+    /* Containment */
+    contain: var(--contain-layout);
+}
+
+.progress-fill {
+    /* Optimized width transition */
+    transition: width var(--animation-duration-normal) var(--animation-timing);
+}
+
+/* Performance-optimized theme toggle */
+.theme-toggle {
+    /* Layer promotion for toggle animation */
+    will-change: transform, background-color;
+    transform: var(--gpu-accelerated);
+    backface-visibility: hidden;
+    
+    /* Optimized transitions */
+    transition: 
+        transform var(--animation-duration-fast) var(--animation-timing),
+        background-color var(--animation-duration-fast) var(--animation-timing);
+}
+
+.theme-toggle-slider {
+    /* Layer promotion for slider animation */
+    will-change: transform;
+    transform: var(--gpu-accelerated);
+    backface-visibility: hidden;
+    
+    /* Optimized transition */
+    transition: transform var(--animation-duration-normal) var(--animation-timing);
+}
+
+/* Optimized responsive images */
+.responsive-image {
+    /* Containment for better image rendering */
+    contain: var(--contain-layout);
+    
+    /* GPU acceleration for image transforms */
+    transform: var(--gpu-accelerated);
+    backface-visibility: hidden;
+    
+    /* Optimized transition */
+    transition: transform var(--animation-duration-normal) var(--animation-timing);
+}
+
+/* Performance-optimized sidebar */
+.sidebar {
+    /* Layer promotion for sidebar animations */
+    will-change: transform;
+    transform: var(--gpu-accelerated);
+    backface-visibility: hidden;
+    
+    /* Containment */
+    contain: var(--contain-layout);
+    
+    /* Optimized transitions */
+    transition: transform var(--animation-duration-normal) var(--animation-timing);
+}
+
+/* Optimized search results */
+.search-results {
+    /* Containment for better rendering */
+    contain: var(--contain-layout);
+    
+    /* Layer promotion for animations */
+    will-change: opacity, transform;
+    transform: var(--gpu-accelerated);
+    backface-visibility: hidden;
+}
+
+/* Performance-optimized pagination */
+.pagination {
+    /* Layer promotion for pagination animations */
+    will-change: transform;
+    transform: var(--gpu-accelerated);
+    backface-visibility: hidden;
+    
+    /* Containment */
+    contain: var(--contain-layout);
+}
+
+/* Optimized filter controls */
+.filter-controls {
+    /* Containment for filter rendering */
+    contain: var(--contain-layout);
+    
+    /* Layer promotion for filter animations */
+    will-change: transform, opacity;
+    transform: var(--gpu-accelerated);
+    backface-visibility: hidden;
+}
+
+/* Performance monitoring utilities */
+.performance-monitor {
+    /* Hidden by default, enabled with debug mode */
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 12px;
+    z-index: 10000;
+    display: none;
+}
+
+/* Enable performance monitor in development */
+body.debug .performance-monitor {
+    display: block;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .gpu-accelerated {
+        transform: none;
+    }
+}
+
+/* High DPI optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    /* Thinner borders for high DPI displays */
+    .card, .stat-card, .btn {
+        border-width: 0.5px;
+    }
+    
+    /* Optimized shadows for high DPI */
+    .card:hover, .stat-card:hover {
+        box-shadow: 0 6px 20px 0 rgba(31, 38, 135, 0.15);
+    }
+}
+
+/* Mobile performance optimizations */
+@media (max-width: 768px) {
+    /* Reduce animation complexity on mobile */
+    .gpu-accelerated {
+        will-change: transform;
+    }
+    
+    /* Simplified transitions for mobile */
+    .performance-transition {
+        transition: transform var(--animation-duration-fast) var(--animation-timing);
+    }
+    
+    /* Disable non-essential animations on mobile */
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+/* Low-end device optimizations */
+@media (max-width: 480px) and (max-height: 800px) {
+    /* Minimal animations for low-end devices */
+    .card, .stat-card, .btn, .tab-btn {
+        will-change: auto;
+        transform: none;
+        transition: none;
+    }
+    
+    /* Only essential transitions */
+    .btn:hover, .tab-btn:hover {
+        transform: scale(1.05);
+    }
+}
+
+/* Print optimizations */
+@media print {
+    /* Disable all animations for printing */
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+        will-change: auto !important;
+        transform: none !important;
+    }
+    
+    /* Optimize layout for printing */
+    .card, .stat-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+}
+
+/* Memory optimization utilities */
+.memory-optimized {
+    /* Containment to reduce repaints */
+    contain: var(--contain-layout);
+    
+    /* Reduce composite layers */
+    will-change: auto;
+    
+    /* Optimize for memory */
+    transform: translateZ(0);
+}
+
+/* Critical CSS inlining hint */
+.critical-above-fold {
+    /* These styles should be inlined in HTML */
+    contain: layout style paint;
+}
+
+/* Lazy loading placeholder */
+.lazy-load-placeholder {
+    /* Optimized placeholder for lazy loading */
+    min-height: 200px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading-shimmer 1.5s infinite;
+    contain: var(--contain-layout);
+}
+
+@keyframes loading-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Optimized focus styles for accessibility */
+.focus-visible:focus {
+    /* High contrast focus indicator */
+    outline: 2px solid #0066cc;
+    outline-offset: 2px;
+    
+    /* Layer promotion for focus animation */
+    will-change: outline-color, outline-offset;
+    transform: var(--gpu-accelerated);
+    
+    /* Optimized transition */
+    transition: 
+        outline-color var(--animation-duration-fast) var(--animation-timing),
+        outline-offset var(--animation-duration-fast) var(--animation-timing);
+}
+
+/* Performance debugging utilities */
+.debug-layer {
+    /* Visual debugging for layer boundaries */
+    outline: 1px solid red;
+    background: rgba(255, 0, 0, 0.1);
+}
+
+.debug-composite {
+    /* Visual debugging for composite layers */
+    outline: 1px solid green;
+    background: rgba(0, 255, 0, 0.1);
+}
+
+/* Enable debug layers in development mode */
+body.debug .debug-layer {
+    outline: 1px solid rgba(255, 0, 0, 0.5);
+}
+
+body.debug .debug-composite {
+    outline: 1px solid rgba(0, 255, 0, 0.5);
+}

@@ -3,29 +3,50 @@
 /* Mobile First Approach */
 @media (max-width: 480px) {
     .container {
-        padding: 0 15px;
+        padding: 0 var(--spacing);
     }
 
     .dashboard-grid {
         grid-template-columns: 1fr;
-        gap: 16px;
+        gap: var(--spacing-lg);
     }
 
     .stat-card {
-        padding: 20px;
+        padding: var(--spacing-xl);
+        border-radius: var(--radius-lg);
+        min-height: 160px;
     }
 
     .stat-value {
-        font-size: 1.5em;
+        font-size: 2rem;
+    }
+
+    .circular-progress {
+        width: 100px;
+        height: 100px;
+    }
+
+    .circular-progress .percentage {
+        font-size: 1.5rem;
     }
 
     header .container {
         flex-direction: column;
-        gap: 15px;
+        gap: var(--spacing-lg);
     }
 
     header h1 {
-        font-size: 1.4em;
+        font-size: 1.8rem;
+    }
+
+    .user-section {
+        flex-direction: column;
+        gap: var(--spacing);
+        width: 100%;
+    }
+
+    .user-info {
+        align-items: center;
     }
 
     .tabs {
@@ -34,35 +55,48 @@
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
         -ms-overflow-style: none;
+        background: var(--glass-bg);
+        backdrop-filter: var(--glass-backdrop);
+        -webkit-backdrop-filter: var(--glass-backdrop);
+        border-radius: var(--radius-lg);
+        padding: var(--spacing-xs);
+        box-shadow: var(--shadow-light);
     }
 
     .tab-btn {
-        padding: 12px 16px;
-        font-size: 0.85em;
+        padding: var(--spacing) var(--spacing-lg);
+        font-size: 0.85rem;
         white-space: nowrap;
+        border-radius: var(--radius);
+        transition: all var(--transition);
+        min-width: 120px;
     }
 
     .grid-2,
     .grid-3 {
         grid-template-columns: 1fr;
-        gap: 15px;
+        gap: var(--spacing-lg);
     }
 
     .card {
-        padding: 20px;
-        margin-bottom: 16px;
+        padding: var(--spacing-xl);
+        margin-bottom: var(--spacing-lg);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-light);
     }
 
     .filter-row {
         grid-template-columns: 1fr;
-        gap: 15px;
+        gap: var(--spacing-lg);
     }
 
     .transaction-item {
         flex-direction: column;
         align-items: flex-start;
-        gap: 10px;
-        padding: 15px;
+        gap: var(--spacing);
+        padding: var(--spacing-lg);
+        border-radius: var(--radius-lg);
+        transition: all var(--transition);
     }
 
     .transaction-item > div {
@@ -75,13 +109,14 @@
     .login-page {
         flex-direction: column;
         max-width: 100%;
-        margin: 10px;
+        margin: var(--spacing);
         min-height: auto;
+        border-radius: var(--radius-lg);
     }
 
     .login-left,
     .login-right {
-        padding: 20px;
+        padding: var(--spacing-xl);
     }
 
     .notificationsPanel {
@@ -89,6 +124,8 @@
         max-width: 300px;
         right: 5vw;
         top: 70px;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-medium);
     }
 }
 
@@ -98,137 +135,161 @@
     }
 
     .stat-card {
-        padding: 24px;
+        padding: var(--spacing-xl);
+        border-radius: var(--radius-lg);
     }
 
     header .container {
         flex-direction: column;
-        gap: 20px;
+        gap: var(--spacing-lg);
     }
 
     .tabs {
-        gap: 5px;
+        gap: var(--spacing-xs);
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        border-radius: var(--radius-lg);
+        padding: var(--spacing-xs);
+        box-shadow: var(--shadow-sm);
     }
 
     .tab-btn {
-        padding: 12px 18px;
+        padding: var(--spacing-sm) var(--spacing-lg);
         font-size: 0.9em;
+        border-radius: var(--radius-md);
+        transition: all var(--transition-base);
     }
 
     .grid-2 {
         grid-template-columns: 1fr;
-        gap: 18px;
+        gap: var(--spacing-lg);
     }
 
     .grid-3 {
         grid-template-columns: 1fr;
-        gap: 15px;
+        gap: var(--spacing-md);
     }
 
     .card {
-        padding: 24px;
-        margin-bottom: 20px;
+        padding: var(--spacing-xl);
+        margin-bottom: var(--spacing-lg);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-md);
     }
 
     .filter-row {
         grid-template-columns: 1fr;
-        gap: 18px;
+        gap: var(--spacing-lg);
     }
 
     .transaction-item {
-        padding: 15px;
+        padding: var(--spacing-md);
+        border-radius: var(--radius-lg);
+        transition: all var(--transition-base);
     }
 
     .strategy-item {
-        padding: 20px;
-        margin-bottom: 15px;
+        padding: var(--spacing-lg);
+        margin-bottom: var(--spacing-md);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        transition: all var(--transition-base);
     }
 
     .login-page {
         max-width: 100%;
-        margin: 20px;
-        border-radius: 15px;
+        margin: var(--spacing-lg);
+        border-radius: var(--radius-xl);
     }
 
     .login-left,
     .login-right {
-        padding: 30px 20px;
+        padding: var(--spacing-xl) var(--spacing-lg);
     }
 
     .login-logo {
         font-size: 2em;
-        margin-bottom: 15px;
+        margin-bottom: var(--spacing-md);
     }
 
     .login-left h1 {
         font-size: 1.6em;
-        margin-bottom: 8px;
+        margin-bottom: var(--spacing-sm);
     }
 
     .login-subtitle {
         font-size: 0.9em;
-        margin-bottom: 20px;
+        margin-bottom: var(--spacing-lg);
     }
 
     .notificationsPanel {
         width: 85vw;
         max-width: 350px;
         right: 2.5vw;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-xl);
     }
 }
 
 @media (max-width: 1024px) {
     .container {
-        padding: 0 30px;
+        padding: 0 var(--spacing-xl);
     }
 
     .dashboard-grid {
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 20px;
+        gap: var(--spacing-lg);
     }
 
     .stat-card {
-        padding: 26px;
+        padding: var(--spacing-2xl);
+        border-radius: var(--radius-lg);
     }
 
     .card {
-        padding: 28px;
-        margin-bottom: 20px;
+        padding: var(--spacing-2xl);
+        margin-bottom: var(--spacing-lg);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-md);
     }
 
     .filter-row {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 20px;
+        gap: var(--spacing-lg);
     }
 
     .strategy-item {
-        padding: 22px;
-        margin-bottom: 18px;
+        padding: var(--spacing-xl);
+        margin-bottom: var(--spacing-lg);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        transition: all var(--transition-base);
     }
 
     .login-page {
         max-width: 95%;
-        margin: 25px;
+        margin: var(--spacing-xl);
+        border-radius: var(--radius-xl);
     }
 
     .login-left,
     .login-right {
-        padding: 40px 30px;
+        padding: var(--spacing-2xl) var(--spacing-xl);
     }
 
     .login-logo {
         font-size: 2.2em;
-        margin-bottom: 25px;
+        margin-bottom: var(--spacing-xl);
     }
 
     .login-left h1 {
         font-size: 1.8em;
-        margin-bottom: 12px;
+        margin-bottom: var(--spacing-md);
     }
 
     .login-subtitle {
         font-size: 0.95em;
-        margin-bottom: 25px;
+        margin-bottom: var(--spacing-xl);
     }
 }
 
@@ -242,7 +303,7 @@
     }
 
     .transaction-item {
-        padding: 20px 15px;
+        padding: var(--spacing-lg) var(--spacing-md);
     }
 
     input[type="text"],
@@ -252,6 +313,8 @@
     textarea {
         min-height: 44px;
         font-size: 16px;
+        border-radius: var(--radius-md);
+        padding: var(--spacing-sm) var(--spacing-md);
     }
 }
 
@@ -275,7 +338,7 @@
 
     .dashboard-grid {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 15px;
+        gap: var(--spacing-md);
     }
 
     .transaction-item {
@@ -323,7 +386,7 @@
 
 ::-webkit-scrollbar-thumb {
     background: var(--border);
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
 }
 
 ::-webkit-scrollbar-thumb:hover {
